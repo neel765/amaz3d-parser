@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Amazon 3D Model Parser</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      line-height: 1.6;
+      margin: 20px;
+      padding: 0;
+      background-color: #f0f0f0;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .form-container {
+      max-width: 600px;
+      margin: 0 auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    form {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      padding: 8px;
+      font-size: 16px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    input[type="submit"] {
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 16px;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    input[type="submit"]:hover {
+      background-color: #45a049;
+    }
+
+    .output {
+      margin-top: 20px;
+    }
+
+    .output p {
+      margin-bottom: 10px;
+    }
+
+    .output a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+
+    .output a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h1>Amazon 3D Model Parser</h1>
+    <form id="urlForm">
+      <label>Amazon URL: <input type="text" id="urlInput" name="url" /></label>
+      <input type="submit" value="Get 3D Model URL" />
+    </form>
+    <div class="output" id="outputDiv">
+      <!-- Output will be displayed here -->
+    </div>
+
+    <script>
+      document.getElementById('urlForm').addEventListener('submit', async function(event) {
+        event.preventDefault();
+        
+        const url = document.getElementById('urlInput').value.trim();
+        const outputDiv = document.getElementById('outputDiv');
+        
+        if (!url) {
+          outputDiv.innerHTML = '<p>Please enter a valid URL.</p>';
+          return;
+        }
+
+        try {
+          const response = await fetch('/getmodelurl', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            },
+            body: `url=${encodeURIComponent(url)}`
+          });
+
+          const result = await response.text();
+          outputDiv.innerHTML = result;
+        } catch (error) {
+          outputDiv.innerHTML = `<p>Error: ${error.message}</p>`;
+        }
+      });
+    </script>
+  </div>
+</body>
+</html>
